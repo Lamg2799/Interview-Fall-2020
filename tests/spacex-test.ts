@@ -7,6 +7,8 @@ describe('daily_launch_tests', () => {
       {
         flight_number: 1,
         mission_name: 'Mission 1',
+        start: '2015-10-23',
+        end: '2015-12-20',
         rocket: {
           rocket_name: 'Rocket 1',
           rocket_type: 'Rocket Type 1',
@@ -23,6 +25,8 @@ describe('daily_launch_tests', () => {
         flight_number: 1,
         mission_name: 'Mission 1',
         rocket_name: 'Rocket 1',
+        start: '2015-10-23',
+        end: '2015-12-20',
         rocket_type: 'Rocket Type 1',
         details: 'space is cool man',
         launch_success: true,
@@ -34,10 +38,10 @@ describe('daily_launch_tests', () => {
 
   it('test with invalid date', async () => {
     const launches = new Launches();
-    const result = await launches.getLaunchesByYear('jaslkdjalskjdalksdj');
+    const result = await launches.getLaunchesByStartAndEnd('jaslkdjalskjdalksdj', 'adawadwawd');
     expect(result).toEqual([
       {
-        error: `invalid year`,
+        error: `invalid years selected`,
       },
     ]);
   });
@@ -47,6 +51,8 @@ describe('daily_launch_tests', () => {
       {
         flight_number: 1,
         mission_name: 'Mission 1',
+        start: '2015-10-23',
+        end: '2015-12-20',
         rocket: {
           rocket_name: 'Rocket 1',
           rocket_type: 'Rocket Type 1',
@@ -59,6 +65,8 @@ describe('daily_launch_tests', () => {
       {
         flight_number: 1,
         mission_name: 'Mission 1',
+        start: '2015-10-23',
+        end: '2015-12-20',
         rocket_name: 'Rocket 1',
         rocket_type: 'Rocket Type 1',
         details: 'space is cool man',
@@ -69,16 +77,18 @@ describe('daily_launch_tests', () => {
     spyOn(launches, 'requestLaunchesByYear').and.returnValue(
       Promise.resolve(res)
     );
-    const result = await launches.getLaunchesByYear('2020');
+    const result = await launches.getLaunchesByStartAndEnd('2020-01-01', '2020-03-20');
     expect(result).toEqual(expected);
   });
 
     it('actually make api call, check required fields', async () => {
       const launches = new Launches();
-      const result = await launches.getLaunchesByYear('2020');
+      const result = await launches.getLaunchesByStartAndEnd('2020-01-01', '2020-03-20');
       expect(!!(result.length
           && result[0].flight_number
           && result[0].mission_name
+          && result[0].start
+          && result[0].end
           && result[0].rocket_name
           && result[0].rocket_type
           )).toBe(true);
